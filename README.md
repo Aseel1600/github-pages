@@ -1,75 +1,159 @@
-<header>
+<!DOCTYPE html>
+<html lang="ar" translate="yes">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الساعة المخصصة</title>
+    <!-- ربط Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            text-align: center;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 10vh;
+        }
 
-<!--
-  <<< Author notes: Course header >>>
-  Include a 1280×640 image, course title in sentence case, and a concise description in emphasis.
-  In your repository settings: enable template repository, add your 1280×640 social image, auto delete head branches.
-  Add your open source license, GitHub uses MIT license.
--->
+        h1 {
+            font-size: 30px;
+            margin-bottom: 0px;
+            color: ‎#2c6e50 ;
+        }
 
-# GitHub Pages
+        h2 {
+            font-size: 45px;
+            margin-bottom: 0px;
+            color: ‎#2c7e50 ;
+        }
 
-_Create a site or blog from your GitHub repositories with GitHub Pages._
+        .clock-container {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-</header>
+        .digital-clock {
+            font-size: 44px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
 
-<!--
-  <<< Author notes: Course start >>>
-  Include start button, a note about Actions minutes,
-  and tell the learner why they should take the course.
--->
+        .device-clock {
+            color: #3498db;
+        }
 
-## Welcome
+        .custom-clock {
+            color: #e74c3c;
+        }
 
-With GitHub Pages, you can host project blogs, documentation, resumes, portfolios, or any other static content you'd like. Your GitHub repository can easily become its own website. In this course, we'll show you how to set up your own site or blog using GitHub Pages.
+        .clock-label {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #f39c12;
+        }
 
-- **Who is this for**: Beginners, students, project maintainers, small businesses.
-- **What you'll learn**: How to build a GitHub Pages site.
-- **What you'll build**: We'll build a simple GitHub Pages site with a blog. We'll use [Jekyll](https://jekyllrb.com), a static site generator.
-- **Prerequisites**: If you need to learn about branches, commits, and pull requests, take [Introduction to GitHub](https://github.com/skills/introduction-to-github) first.
-- **How long**: This course takes less than one hour to complete.
+        /* تحسين عرض النصوص القابلة للترجمة */
+        [translate="yes"] {
+            cursor: pointer;
+            text-decoration: ;
+        }
+    </style>
+</head>
+<body>
 
-In this course, you will:
+    <h2>Bicka V 3.0.7</h2>
+<h1>اللهم صلي وسلم على نبينا محمد وعلى آله وصحبه أجمعين وسلم تسليما كثيرا </h1>
 
-1. Enable GitHub Pages
-2. Configure your site
-3. Customize your home page
-4. Create a blog post
-5. Merge your pull request
+    <div class="clock-container">
+        <div class="clock-label">Original Clock (Device Clock 24h/d)</div>
+        <div class="digital-clock device-clock" id="device-clock">00:00:00</div>
 
-### How to start this course
+        <div class="clock-label">Modern Clock (Future Clock 30h/d)</div> 
+        <div class="digital-clock custom-clock" id="custom-clock">00:00:00</div>
+    </div>
 
-<!-- For start course, run in JavaScript:
-'https://github.com/new?' + new URLSearchParams({
-  template_owner: 'skills',
-  template_name: 'github-pages',
-  owner: '@me',
-  name: 'skills-github-pages',
-  description: 'My clone repository',
-  visibility: 'public',
-}).toString()
--->
+    <script>
+        // تحميل Google Translate API
+        function loadGoogleTranslateAPI() {
+            const script = document.createElement('script');
+            script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.body.appendChild(script);
+        }
 
-[![start-course](https://user-images.githubusercontent.com/1221423/235727646-4a590299-ffe5-480d-8cd5-8194ea184546.svg)](https://github.com/new?template_owner=skills&template_name=github-pages&owner=%40me&name=skills-github-pages&description=My+clone+repository&visibility=public)
+        // تفعيل Google Translate API
+        window.googleTranslateElementInit = function () {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'ar,en,fr,es,de' },
+                'google-translate-element'
+            );
+        };
 
-1. Right-click **Start course** and open the link in a new tab.
-2. In the new tab, most of the prompts will automatically fill in for you.
-   - For owner, choose your personal account or an organization to host the repository.
-   - We recommend creating a public repository, as private repositories will [use Actions minutes](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
-   - Scroll down and click the **Create repository** button at the bottom of the form.
-3. After your new repository is created, wait about 20 seconds, then refresh the page. Follow the step-by-step instructions in the new repository's README.
+        // تأجيل تحميل Google Translate API حتى يتم تحميل الصفحة
+        window.onload = function () {
+            loadGoogleTranslateAPI();
+        };
 
-<footer>
+        // تعريف الساعتين
+        const deviceClockDisplay = document.getElementById('device-clock');
+        const customClockDisplay = document.getElementById('custom-clock');
 
-<!--
-  <<< Author notes: Footer >>>
-  Add a link to get support, GitHub status page, code of conduct, license link.
--->
+        const hoursInDay = 30; // عدد الساعات في اليوم المخصص
+        const timeScaleFactor = 1; // معدل سرعة الوقت (كل 4 ساعات حقيقية = 5 ساعات محدثة)
 
----
+        function updateDeviceClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            deviceClockDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+        }
 
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/github-pages) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
+        function customClock() {
+            const secondsPerMinute = 60;
+            const minutesPerHour = 60;
 
-&copy; 2023 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+            const now = new Date();
+            const totalSecondsToday = now.getHours() * secondsPerMinute * minutesPerHour + 
+                                      now.getMinutes() * secondsPerMinute + 
+                                      now.getSeconds();
 
-</footer>
+            // حساب الزمن المخصص بناءً على الساعة الحقيقية
+            const scaledTimeInSeconds = Math.floor(totalSecondsToday * (hoursInDay / 24) * timeScaleFactor);
+
+            // حساب الزمن في النظام المخصص
+            let customHours = Math.floor(scaledTimeInSeconds / (secondsPerMinute * minutesPerHour) % hoursInDay);
+            let customMinutes = Math.floor(scaledTimeInSeconds / secondsPerMinute % minutesPerHour);
+            let customSeconds = Math.floor(scaledTimeInSeconds % secondsPerMinute);
+
+            // صياغة النتيجة بتنسيق "HH:MM:SS"
+            let formattedCustomTime = 
+                String(customHours).padStart(2, '0') + ":" +
+                String(customMinutes).padStart(2, '0') + ":" +
+                String(customSeconds).padStart(2, '0');
+
+            // تحديث العرض الرقمي للساعة المخصصة
+            customClockDisplay.textContent = formattedCustomTime;
+
+            // تحديث الساعة كل 100 ميلي ثانية
+            setTimeout(customClock, 100);
+        }
+
+        // بدء الساعات عند تحميل الصفحة
+        updateDeviceClock();
+        setInterval(updateDeviceClock, 1000); // تحديث الساعة الحقيقية كل ثانية
+        customClock();
+    </script>
+
+    <!-- إضافة عنصر Google Translate -->
+    <div id="google-translate-element"></div>
+
+</body>
+</html>
